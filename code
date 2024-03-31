@@ -1,0 +1,147 @@
+import java.util.Scanner;
+
+class Person {
+    private String name;
+    private String address;
+
+    public Person(String name, String address) {
+        this.name = name;
+        this.address = address;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String toString() {
+        return "Name: " + name + "\nAddress: " + address;
+    }
+}
+
+class Student extends Person {
+    private int numCourses = 0;
+    private String[] courses = new String[30];
+    private String[] grades = new String[30];
+
+    public Student(String name, String address) {
+        super(name, address);
+    }
+
+    public void addCourseGrade(String course, String grade) {
+        courses[numCourses] = course;
+        grades[numCourses] = grade;
+        numCourses++;
+    }
+
+    public void printGrades() {
+        System.out.println("Grades:");
+        for (int i = 0; i < numCourses; i++) {
+            System.out.println(courses[i] + ": " + grades[i]);
+        }
+    }
+
+    public double getAverageGrade() {
+        int sum = 0;
+        for (int i = 0; i < numCourses; i++) {
+            if (grades[i].equals("A")) {
+                sum += 4;
+            } else if (grades[i].equals("B")) {
+                sum += 3;
+            } else if (grades[i].equals("C")) {
+                sum += 2;
+            } else if (grades[i].equals("D")) {
+                sum += 1;
+            }
+        }
+        return (double) sum / numCourses;
+    }
+
+    public String toString() {
+        return super.toString() + "\nStatus: Student";
+    }
+}
+
+class Teacher extends Person {
+    private int numCourses = 0;
+    private String[] courses = new String[5];
+
+    public Teacher(String name, String address) {
+        super(name, address);
+    }
+
+    public boolean addCourse(String course) {
+        for (int i = 0; i < numCourses; i++) {
+            if (courses[i].equals(course)) {
+                return false;
+            }
+        }
+        courses[numCourses] = course;
+        numCourses++;
+        return true;
+    }
+
+    public boolean removeCourse(String course) {
+        boolean found = false;
+        for (int i = 0; i < numCourses; i++) {
+            if (courses[i].equals(course)) {
+                found = true;
+                for (int j = i; j < numCourses - 1; j++) {
+                    courses[j] = courses[j + 1];
+                }
+                numCourses--;
+                break;
+            }
+        }
+        return found;
+    }
+
+    public String toString() {
+        return super.toString() + "\nStatus: Teacher";
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter student's name:");
+        String studentName = scanner.nextLine();
+        System.out.println("Enter student's address:");
+        String studentAddress = scanner.nextLine();
+
+        Student student = new Student(studentName, studentAddress);
+
+        System.out.println("Enter teacher's name:");
+        String teacherName = scanner.nextLine();
+        System.out.println("Enter teacher's address:");
+        String teacherAddress = scanner.nextLine();
+
+        Teacher teacher = new Teacher(teacherName, teacherAddress);
+
+        System.out.println("Enter course name for the teacher:");
+        String courseName = scanner.nextLine();
+        teacher.addCourse(courseName);
+
+        System.out.println("Enter course name for the student:");
+        String studentCourseName = scanner.nextLine();
+        System.out.println("Enter grade for the student:");
+        String studentGrade = scanner.nextLine();
+        student.addCourseGrade(studentCourseName, studentGrade);
+
+        System.out.println("\nStudent Information:\n" + student.toString());
+        System.out.println("\nTeacher Information:\n" + teacher.toString());
+        System.out.println("\nStudent Grades:");
+        student.printGrades();
+        System.out.println("\nStudent Average Grade: " + student.getAverageGrade());
+
+        scanner.close();
+    }
+}
